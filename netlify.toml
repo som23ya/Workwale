@@ -1,0 +1,20 @@
+[build]
+  base = "frontend"
+  command = "npm install && npm run build"
+  publish = "frontend/out"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://workwale-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NEXT_PUBLIC_API_URL = "https://workwale-backend.onrender.com"
+  NODE_ENV = "production"
+  NETLIFY = "true"

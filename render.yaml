@@ -5,9 +5,8 @@ services:
     env: docker
     plan: free
     region: ohio
-    databases:
-      - name: workwale
-        user: workwale_user
+    databaseName: workwale
+    databaseUser: workwale_user
 
   # FastAPI Backend
   - type: web
@@ -15,8 +14,9 @@ services:
     env: python
     region: ohio
     plan: free
-    buildCommand: "cd backend && pip install -r requirements.txt"
-    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -38,8 +38,9 @@ services:
     env: node
     region: ohio
     plan: free
-    buildCommand: "cd frontend && npm install && npm run build"
-    startCommand: "cd frontend && npm start"
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://workwale-backend.onrender.com

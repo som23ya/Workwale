@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: process.env.NODE_ENV === 'production' && process.env.NETLIFY ? 'export' : 'standalone',
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  },
   experimental: {
     outputFileTracingRoot: './',
   },
