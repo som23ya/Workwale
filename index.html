@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkWale.ai - AI-Powered Job Discovery Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables for Theme Management */
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --background-color: #ffffff;
+            --surface-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --font-family: 'Roboto', sans-serif;
+            --border-radius: 8px;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --animation-speed: 0.3s;
+        }
+
+        /* Game Mode Variables */
+        .game-mode {
+            --primary-color: #e53e3e;
+            --secondary-color: #3182ce;
+            --background-color: #87ceeb;
+            --surface-color: #98fb98;
+            --text-color: #000000;
+            --border-color: #8b4513;
+            --success-color: #228b22;
+            --warning-color: #ffd700;
+            --error-color: #dc143c;
+            --font-family: 'Press Start 2P', monospace;
+            --border-radius: 0px;
+            --shadow: 4px 4px 0px #000000;
+            --animation-speed: 0.5s;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all var(--animation-speed) ease;
+            min-height: 100vh;
+        }
+
+        /* Game Mode Background */
+        .game-mode body {
+            background: linear-gradient(180deg, #87ceeb 0%, #98fb98 50%, #8b4513 100%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .game-mode body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 20%, white 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, white 1px, transparent 1px),
+                radial-gradient(circle at 40% 40%, white 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 200px 200px;
+            animation: clouds 20s linear infinite;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes clouds {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100px); }
+        }
+
+        /* Header */
+        header {
+            background: var(--surface-color);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .game-mode .logo {
+            font-size: 1rem;
+            text-shadow: 2px 2px 0px var(--warning-color);
+        }
+
+        /* Game Mode Toggle */
+        .game-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all var(--animation-speed) ease;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all var(--animation-speed) ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary-color);
+        }
+
+        .toggle-switch.active::before {
+            transform: translateX(30px);
+        }
+
+        .game-mode .toggle-switch {
+            border: 2px solid black;
+            border-radius: 0;
+        }
+
+        /* Navigation */
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color var(--animation-speed) ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+        }
+
+        .game-mode nav a {
+            font-size: 0.7rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 3rem;
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .game-mode .section {
+            border: 3px solid black;
+            background: var(--surface-color);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .game-mode .section-title {
+            font-size: 1rem;
+            text-shadow: 2px 2px 0px var(--warning-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .game-mode label {
+            font-size: 0.7rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: border-color var(--animation-speed) ease;
+        }
+
+        .game-mode input,
+        .game-mode textarea,
+        .game-mode select {
+            border-radius: 0;
+            border: 2px solid black;
+            font-size: 0.8rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all var(--animation-speed) ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover, .file-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .game-mode .file-upload {
+            border-radius: 0;
+            border: 3px dashed black;
+            background: var(--warning-color);
+        }
+
+        .game-mode .file-upload:hover {
+            background: #ffff99;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--animation-speed) ease;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .game-mode .btn {
+            border-radius: 0;
+            border: 3px solid black;
+            box-shadow: 4px 4px 0px black;
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 0px black;
+        }
+
+        .game-mode .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px black;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        /* Job Cards */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .job-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            transition: all var(--animation-speed) ease;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .game-mode .job-card {
+            border: 3px solid black;
+            border-radius: 0;
+            background: #fffacd;
+        }
+
+        .game-mode .job-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px black;
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .game-mode .job-title {
+            font-size: 0.8rem;
+        }
+
+        .job-company {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .job-location {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .job-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .game-mode .skill-tag {
+            border-radius: 0;
+            border: 1px solid black;
+            background: var(--success-color);
+            font-size: 0.6rem;
+        }
+
+        .match-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--error-color) 0%, var(--warning-color) 50%, var(--success-color) 100%);
+            transition: width var(--animation-speed) ease;
+        }
+
+        .game-mode .score-bar {
+            border-radius: 0;
+            border: 1px solid black;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .game-mode .stat-card {
+            border: 3px solid black;
+            border-radius: 0;
+            background: #f0e68c;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .game-mode .stat-value {
+            font-size: 1.2rem;
+        }
+
+        .stat-label {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
+        .game-mode .stat-label {
+            font-size: 0.6rem;
+        }
+
+        /* Alert Settings */
+        .alert-settings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .alert-group {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .game-mode .alert-group {
+            border: 3px solid black;
+            border-radius: 0;
+            background: #ffb6c1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .game-mode .section-title {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .game-mode .btn {
+            animation: bounce 2s infinite;
+        }
+
+        .game-mode .btn:hover {
+            animation: none;
+        }
+
+        /* Hidden sections */
+        .section.hidden {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+        .game-mode .message {
+            border-radius: 0;
+            border-width: 3px;
+            font-size: 0.7rem;
+        }
+
+        /* Profile Section */
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-field {
+            background: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .game-mode .profile-field {
+            border: 2px solid black;
+            border-radius: 0;
+            background: #e6e6fa;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .field-value {
+            font-weight: 500;
+        }
+
+        .game-mode .field-label {
+            font-size: 0.6rem;
+        }
+
+        .game-mode .field-value {
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">🚀 WorkWale.ai</a>
+            
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#upload" class="nav-link" data-section="upload">Upload Resume</a></li>
+                    <li><a href="#jobs" class="nav-link" data-section="jobs">Find Jobs</a></li>
+                    <li><a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a></li>
+                    <li><a href="#alerts" class="nav-link" data-section="alerts">Alerts</a></li>
+                </ul>
+            </nav>
+            
+            <div class="game-toggle">
+                <span>🎮 Game Mode</span>
+                <div class="toggle-switch" id="gameToggle"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <h1 class="section-title">Welcome to WorkWale.ai</h1>
+            <p>Reduce your job search effort by 90% with our AI-powered job discovery platform. Get 70% more relevant job matches and land your dream job faster!</p>
+            
+            <div style="margin-top: 2rem;">
+                <h3>Key Features:</h3>
+                <ul style="margin-top: 1rem; padding-left: 2rem;">
+                    <li>AI-powered resume parsing and job matching</li>
+                    <li>Smart job alerts via WhatsApp and Email</li>
+                    <li>Real-time job scraping from top platforms</li>
+                    <li>Comprehensive analytics and tracking</li>
+                    <li>User-friendly dashboard with insights</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <button class="btn" onclick="showSection('upload')">Get Started - Upload Resume</button>
+                <button class="btn btn-secondary" onclick="showSection('jobs')" style="margin-left: 1rem;">Browse Jobs</button>
+            </div>
+        </section>
+
+        <!-- Resume Upload Section -->
+        <section id="upload" class="section hidden">
+            <h2 class="section-title">Upload Your Resume</h2>
+            <p>Upload your resume and let our AI extract key information to find the best job matches for you.</p>
+            
+            <div id="uploadMessage"></div>
+            
+            <form id="resumeForm">
+                <div class="form-group">
+                    <label for="resumeFile">Resume File (PDF)</label>
+                    <div class="file-upload" id="fileUpload">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary-color);"></i>
+                        <p>Drag and drop your resume here or click to browse</p>
+                        <input type="file" id="resumeFile" accept=".pdf" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skills">Skills (comma-separated)</label>
+                    <textarea id="skills" rows="3" placeholder="e.g., JavaScript, Python, React, Node.js"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience">Years of Experience</label>
+                    <select id="experience">
+                        <option value="0-1">0-1 years</option>
+                        <option value="1-3">1-3 years</option>
+                        <option value="3-5">3-5 years</option>
+                        <option value="5-10">5-10 years</option>
+                        <option value="10+">10+ years</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Preferred Location</label>
+                    <input type="text" id="location" placeholder="e.g., New York, Remote, Bangalore">
+                </div>
+                
+                <button type="submit" class="btn">
+                    <span id="uploadBtn">Process Resume with AI</span>
+                    <span id="uploadLoading" class="loading" style="display: none;"></span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Jobs Section -->
+        <section id="jobs" class="section hidden">
+            <h2 class="section-title">AI-Matched Jobs</h2>
+            <p>Jobs tailored to your skills and experience, scraped from top platforms like Naukri and LinkedIn.</p>
+            
+            <div style="margin-bottom: 2rem;">
+                <div class="form-group" style="display: inline-block; margin-right: 1rem;">
+                    <select id="jobFilter" onchange="filterJobs()">
+                        <option value="all">All Jobs</option>
+                        <option value="high">High Match (80%+)</option>
+                        <option value="medium">Medium Match (60-79%)</option>
+                        <option value="low">Low Match (<60%)</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="refreshJobs()">Refresh Jobs</button>
+            </div>
+            
+            <div id="jobsContainer">
+                <div class="jobs-grid" id="jobsGrid">
+                    <!-- Jobs will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section hidden">
+            <h2 class="section-title">Your Dashboard</h2>
+            <p>Track your job search progress and analytics.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalJobs">0</div>
+                    <div class="stat-label">Total Jobs Viewed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="matchedJobs">0</div>
+                    <div class="stat-label">High Match Jobs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="appliedJobs">0</div>
+                    <div class="stat-label">Applications Sent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgMatchScore">0%</div>
+                    <div class="stat-label">Avg Match Score</div>
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-field">
+                    <div class="field-label">Name</div>
+                    <div class="field-value" id="profileName">Not set</div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-label">Email</div>
+                    <div class="field-value" id="profileEmail">Not set</div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-label">Experience</div>
+                    <div class="field-value" id="profileExperience">Not set</div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-label">Skills</div>
+                    <div class="field-value" id="profileSkills">Not set</div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-label">Location</div>
+                    <div class="field-value" id="profileLocation">Not set</div>
+                </div>
+                <div class="profile-field">
+                    <div class="field-label">Resume Status</div>
+                    <div class="field-value" id="resumeStatus">Not uploaded</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section id="alerts" class="section hidden">
+            <h2 class="section-title">Smart Job Alerts</h2>
+            <p>Configure your job alert preferences to never miss the perfect opportunity.</p>
+            
+            <div id="alertMessage"></div>
+            
+            <div class="alert-settings">
+                <div class="alert-group">
+                    <h3>Email Alerts</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="emailAlerts" checked> Enable Email Alerts
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailFrequency">Frequency</label>
+                        <select id="emailFrequency">
+                            <option value="instant">Instant</option>
+                            <option value="daily" selected>Daily Digest</option>
+                            <option value="weekly">Weekly Summary</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="alert-group">
+                    <h3>WhatsApp Alerts</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="whatsappAlerts"> Enable WhatsApp Alerts
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsappNumber">WhatsApp Number</label>
+                        <input type="tel" id="whatsappNumber" placeholder="+1234567890">
+                    </div>
+                </div>
+                
+                <div class="alert-group">
+                    <h3>Alert Criteria</h3>
+                    <div class="form-group">
+                        <label for="minMatchScore">Minimum Match Score</label>
+                        <select id="minMatchScore">
+                            <option value="50">50%</option>
+                            <option value="60">60%</option>
+                            <option value="70" selected>70%</option>
+                            <option value="80">80%</option>
+                            <option value="90">90%</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobTypes">Job Types</label>
+                        <select id="jobTypes" multiple>
+                            <option value="full-time" selected>Full-time</option>
+                            <option value="part-time">Part-time</option>
+                            <option value="contract">Contract</option>
+                            <option value="remote" selected>Remote</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+                <button class="btn" onclick="saveAlertSettings()">Save Alert Settings</button>
+                <button class="btn btn-secondary" onclick="testAlert()" style="margin-left: 1rem;">Test Alert</button>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: var(--border-radius); border: 1px solid var(--border-color);">
+                <h4>Alert Preview</h4>
+                <div id="alertPreview">
+                    <p><strong>Subject:</strong> New Job Match Found - Software Engineer at TechCorp</p>
+                    <p><strong>Message:</strong> Hi [Name], we found a new job that matches your profile with an 85% match score. The position is for a Software Engineer at TechCorp in New York. Skills required: JavaScript, React, Node.js. Click here to apply!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Mock Job Data (simulating scraped data from Naukri/LinkedIn)
+        const mockJobs = [
+            {
+                id: 1,
+                title: "Senior Frontend Developer",
+                company: "TechCorp Solutions",
+                location: "Bangalore, India",
+                skills: ["JavaScript", "React", "Node.js", "TypeScript"],
+                experience: "3-5 years",
+                salary: "₹15-25 LPA",
+                description: "Looking for an experienced frontend developer to join our dynamic team.",
+                matchScore: 92,
+                source: "Naukri"
+            },
+            {
+                id: 2,
+                title: "Full Stack Engineer",
+                company: "StartupXYZ",
+                location: "Remote",
+                skills: ["Python", "Django", "React", "PostgreSQL"],
+                experience: "2-4 years",
+                salary: "$80k-120k",
+                description: "Join our fast-growing startup and build scalable web applications.",
+                matchScore: 87,
+                source: "LinkedIn"
+            },
+            {
+                id: 3,
+                title: "Backend Developer",
+                company: "Enterprise Tech",
+                location: "Mumbai, India",
+                skills: ["Java", "Spring Boot", "MySQL", "AWS"],
+                experience: "3-6 years",
+                salary: "₹12-20 LPA",
+                description: "Develop robust backend systems for our enterprise clients.",
+                matchScore: 78,
+                source: "Naukri"
+            },
+            {
+                id: 4,
+                title: "DevOps Engineer",
+                company: "Cloud Innovations",
+                location: "Hyderabad, India",
+                skills: ["Docker", "Kubernetes", "AWS", "Jenkins"],
+                experience: "4-7 years",
+                salary: "₹18-30 LPA",
+                description: "Manage and optimize our cloud infrastructure.",
+                matchScore: 65,
+                source: "LinkedIn"
+            },
+            {
+                id: 5,
+                title: "React Native Developer",
+                company: "Mobile First",
+                location: "Pune, India",
+                skills: ["React Native", "JavaScript", "iOS", "Android"],
+                experience: "2-5 years",
+                salary: "₹10-18 LPA",
+                description: "Build amazing mobile applications for millions of users.",
+                matchScore: 82,
+                source: "Naukri"
+            },
+            {
+                id: 6,
+                title: "Data Scientist",
+                company: "AI Analytics",
+                location: "Delhi, India",
+                skills: ["Python", "Machine Learning", "TensorFlow", "SQL"],
+                experience: "3-6 years",
+                salary: "₹20-35 LPA",
+                description: "Analyze complex datasets and build predictive models.",
+                matchScore: 45,
+                source: "LinkedIn"
+            },
+            {
+                id: 7,
+                title: "UI/UX Designer",
+                company: "Design Studio",
+                location: "Bangalore, India",
+                skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
+                experience: "2-4 years",
+                salary: "₹8-15 LPA",
+                description: "Create beautiful and intuitive user experiences.",
+                matchScore: 38,
+                source: "Naukri"
+            },
+            {
+                id: 8,
+                title: "Software Engineer",
+                company: "Global Tech Corp",
+                location: "Remote",
+                skills: ["JavaScript", "Python", "React", "AWS"],
+                experience: "1-3 years",
+                salary: "$70k-100k",
+                description: "Join our global team and work on cutting-edge technologies.",
+                matchScore: 89,
+                source: "LinkedIn"
+            },
+            {
+                id: 9,
+                title: "Frontend Developer",
+                company: "E-commerce Giant",
+                location: "Bangalore, India",
+                skills: ["Vue.js", "JavaScript", "CSS", "HTML"],
+                experience: "2-4 years",
+                salary: "₹12-20 LPA",
+                description: "Build responsive and performant e-commerce interfaces.",
+                matchScore: 76,
+                source: "Naukri"
+            },
+            {
+                id: 10,
+                title: "Machine Learning Engineer",
+                company: "AI Research Lab",
+                location: "Chennai, India",
+                skills: ["Python", "TensorFlow", "PyTorch", "MLOps"],
+                experience: "3-5 years",
+                salary: "₹25-40 LPA",
+                description: "Develop and deploy machine learning models at scale.",
+                matchScore: 52,
+                source: "LinkedIn"
+            }
+        ];
+
+        // Application State
+        let currentUser = {
+            name: '',
+            email: '',
+            phone: '',
+            skills: [],
+            experience: '',
+            location: '',
+            resumeUploaded: false
+        };
+
+        let appStats = {
+            totalJobs: 0,
+            matchedJobs: 0,
+            appliedJobs: 0,
+            avgMatchScore: 0
+        };
+
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const savedUser = localStorage.getItem('workwale_user');
+            const savedStats = localStorage.getItem('workwale_stats');
+            const gameMode = localStorage.getItem('workwale_game_mode');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateProfileDisplay();
+            }
+            
+            if (savedStats) {
+                appStats = JSON.parse(savedStats);
+                updateDashboardStats();
+            }
+            
+            if (gameMode === 'true') {
+                document.body.classList.add('game-mode');
+                document.getElementById('gameToggle').classList.add('active');
+            }
+        }
+
+        // Save data to localStorage
+        function saveUserData() {
+            localStorage.setItem('workwale_user', JSON.stringify(currentUser));
+        }
+
+        function saveStats() {
+            localStorage.setItem('workwale_stats', JSON.stringify(appStats));
+        }
+
+        // Game Mode Toggle
+        document.getElementById('gameToggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.body.classList.toggle('game-mode');
+            
+            const isGameMode = document.body.classList.contains('game-mode');
+            localStorage.setItem('workwale_game_mode', isGameMode);
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            
+            // Load section-specific data
+            if (sectionId === 'jobs') {
+                displayJobs();
+            } else if (sectionId === 'dashboard') {
+                updateDashboardStats();
+                updateProfileDisplay();
+            }
+        }
+
+        // Navigation event listeners
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                showSection(section);
+            });
+        });
+
+        // File Upload
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('resumeFile');
+
+        fileUpload.addEventListener('click', () => fileInput.click());
+
+        fileUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        fileUpload.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        fileUpload.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        function handleFileUpload(file) {
+            if (file.type !== 'application/pdf') {
+                showMessage('uploadMessage', 'Please upload a PDF file.', 'error');
+                return;
+            }
+            
+            // Simulate AI processing
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadLoading = document.getElementById('uploadLoading');
+            
+            uploadBtn.style.display = 'none';
+            uploadLoading.style.display = 'inline-block';
+            
+            setTimeout(() => {
+                // Simulate AI extraction
+                document.getElementById('fullName').value = 'John Doe';
+                document.getElementById('email').value = 'john.doe@email.com';
+                document.getElementById('skills').value = 'JavaScript, React, Node.js, Python, AWS';
+                document.getElementById('experience').value = '3-5';
+                document.getElementById('location').value = 'Bangalore, India';
+                
+                uploadBtn.style.display = 'inline-block';
+                uploadLoading.style.display = 'none';
+                
+                showMessage('uploadMessage', 'Resume processed successfully! AI extracted your information.', 'success');
+            }, 2000);
+        }
+
+        // Resume Form Submission
+        document.getElementById('resumeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Update user data
+            currentUser.name = document.getElementById('fullName').value;
+            currentUser.email = document.getElementById('email').value;
+            currentUser.phone = document.getElementById('phone').value;
+            currentUser.skills = document.getElementById('skills').value.split(',').map(s => s.trim());
+            currentUser.experience = document.getElementById('experience').value;
+            currentUser.location = document.getElementById('location').value;
+            currentUser.resumeUploaded = true;
+            
+            saveUserData();
+            updateProfileDisplay();
+            
+            showMessage('uploadMessage', 'Profile updated successfully! You can now browse matched jobs.', 'success');
+            
+            // Auto-navigate to jobs section after a delay
+            setTimeout(() => {
+                showSection('jobs');
+            }, 2000);
+        });
+
+        // Display Jobs
+        function displayJobs(filter = 'all') {
+            const jobsGrid = document.getElementById('jobsGrid');
+            let filteredJobs = mockJobs;
+            
+            // Apply filter
+            if (filter === 'high') {
+                filteredJobs = mockJobs.filter(job => job.matchScore >= 80);
+            } else if (filter === 'medium') {
+                filteredJobs = mockJobs.filter(job => job.matchScore >= 60 && job.matchScore < 80);
+            } else if (filter === 'low') {
+                filteredJobs = mockJobs.filter(job => job.matchScore < 60);
+            }
+            
+            // Update stats
+            appStats.totalJobs = filteredJobs.length;
+            appStats.matchedJobs = filteredJobs.filter(job => job.matchScore >= 80).length;
+            appStats.avgMatchScore = Math.round(filteredJobs.reduce((sum, job) => sum + job.matchScore, 0) / filteredJobs.length);
+            saveStats();
+            
+            jobsGrid.innerHTML = filteredJobs.map(job => `
+                <div class="job-card" onclick="viewJob(${job.id})">
+                    <div class="job-title">${job.title}</div>
+                    <div class="job-company">${job.company} • ${job.source}</div>
+                    <div class="job-location"><i class="fas fa-map-marker-alt"></i> ${job.location}</div>
+                    <div class="job-skills">
+                        ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                    <div class="match-score">
+                        <span><strong>Match: ${job.matchScore}%</strong></span>
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${job.matchScore}%"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="applyToJob(event, ${job.id})">
+                            <i class="fas fa-paper-plane"></i> Apply Now
+                        </button>
+                        <button class="btn btn-secondary" onclick="saveJob(event, ${job.id})" style="margin-left: 0.5rem;">
+                            <i class="fas fa-bookmark"></i> Save
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterJobs() {
+            const filter = document.getElementById('jobFilter').value;
+            displayJobs(filter);
+        }
+
+        function refreshJobs() {
+            // Simulate new job fetch
+            showMessage('jobsContainer', 'Refreshing jobs...', 'success');
+            setTimeout(() => {
+                displayJobs();
+                document.getElementById('jobsContainer').querySelector('.message').remove();
+            }, 1000);
+        }
+
+        function viewJob(jobId) {
+            const job = mockJobs.find(j => j.id === jobId);
+            alert(`Job Details:\n\n${job.title} at ${job.company}\n\nDescription: ${job.description}\n\nSalary: ${job.salary}\nExperience: ${job.experience}\n\nMatch Score: ${job.matchScore}%`);
+        }
+
+        function applyToJob(event, jobId) {
+            event.stopPropagation();
+            const job = mockJobs.find(j => j.id === jobId);
+            appStats.appliedJobs++;
+            saveStats();
+            updateDashboardStats();
+            alert(`Application sent to ${job.company} for ${job.title} position!`);
+        }
+
+        function saveJob(event, jobId) {
+            event.stopPropagation();
+            const job = mockJobs.find(j => j.id === jobId);
+            alert(`Job "${job.title}" saved to your profile!`);
+        }
+
+        // Dashboard Functions
+        function updateDashboardStats() {
+            document.getElementById('totalJobs').textContent = appStats.totalJobs;
+            document.getElementById('matchedJobs').textContent = appStats.matchedJobs;
+            document.getElementById('appliedJobs').textContent = appStats.appliedJobs;
+            document.getElementById('avgMatchScore').textContent = appStats.avgMatchScore + '%';
+        }
+
+        function updateProfileDisplay() {
+            document.getElementById('profileName').textContent = currentUser.name || 'Not set';
+            document.getElementById('profileEmail').textContent = currentUser.email || 'Not set';
+            document.getElementById('profileExperience').textContent = currentUser.experience || 'Not set';
+            document.getElementById('profileSkills').textContent = currentUser.skills.join(', ') || 'Not set';
+            document.getElementById('profileLocation').textContent = currentUser.location || 'Not set';
+            document.getElementById('resumeStatus').textContent = currentUser.resumeUploaded ? 'Uploaded ✅' : 'Not uploaded';
+        }
+
+        // Alert Functions
+        function saveAlertSettings() {
+            const settings = {
+                emailAlerts: document.getElementById('emailAlerts').checked,
+                emailFrequency: document.getElementById('emailFrequency').value,
+                whatsappAlerts: document.getElementById('whatsappAlerts').checked,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                minMatchScore: document.getElementById('minMatchScore').value,
+                jobTypes: Array.from(document.getElementById('jobTypes').selectedOptions).map(option => option.value)
+            };
+            
+            localStorage.setItem('workwale_alert_settings', JSON.stringify(settings));
+            showMessage('alertMessage', 'Alert settings saved successfully!', 'success');
+        }
+
+        function testAlert() {
+            showMessage('alertMessage', 'Test alert sent! Check your email/WhatsApp.', 'success');
+        }
+
+        // Utility Functions
+        function showMessage(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            // Remove existing messages
+            const existingMessage = container.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            displayJobs();
+            
+            // Load alert settings
+            const savedAlertSettings = localStorage.getItem('workwale_alert_settings');
+            if (savedAlertSettings) {
+                const settings = JSON.parse(savedAlertSettings);
+                document.getElementById('emailAlerts').checked = settings.emailAlerts;
+                document.getElementById('emailFrequency').value = settings.emailFrequency;
+                document.getElementById('whatsappAlerts').checked = settings.whatsappAlerts;
+                document.getElementById('whatsappNumber').value = settings.whatsappNumber || '';
+                document.getElementById('minMatchScore').value = settings.minMatchScore;
+                
+                // Set job types
+                const jobTypesSelect = document.getElementById('jobTypes');
+                Array.from(jobTypesSelect.options).forEach(option => {
+                    option.selected = settings.jobTypes.includes(option.value);
+                });
+            }
+        });
+
+        /*
+        === WorkWale.ai Usage Instructions ===
+        
+        1. GAME MODE TOGGLE:
+           - Click the toggle switch in the header to switch between Professional and Mario Game themes
+           - Your preference is saved and will persist on page refresh
+           - Game Mode features pixelated fonts, Mario colors, and fun animations
+           
+        2. RESUME UPLOAD:
+           - Go to "Upload Resume" section
+           - Drag and drop a PDF file or click to browse
+           - The AI will simulate processing and auto-fill your information
+           - Complete any missing fields and submit
+           
+        3. JOB MATCHING:
+           - Visit "Find Jobs" to see AI-matched positions
+           - Jobs are scored based on your skills and experience
+           - Filter by match score (High/Medium/Low)
+           - Click on jobs to view details, apply, or save
+           
+        4. DASHBOARD:
+           - Track your job search metrics and progress
+           - View your profile information
+           - Monitor application statistics
+           
+        5. SMART ALERTS:
+           - Configure email and WhatsApp job alerts
+           - Set minimum match score and job type preferences
+           - Test alerts to ensure they're working
+           - Preview how alerts will look
+           
+        === Technical Features ===
+        - Responsive design for all devices
+        - Local storage for data persistence
+        - Simulated AI processing with realistic delays
+        - Mock job scraping from Naukri/LinkedIn
+        - Real-time statistics tracking
+        - Accessibility features (keyboard navigation, alt text)
+        - Smooth animations and transitions
+        - Professional and Game Mode themes
+        
+        === Demo Data ===
+        - 10 sample jobs with varying match scores
+        - Simulated resume parsing
+        - Mock alert system
+        - Statistics tracking in localStorage
+        */
+    </script>
+</body>
+</html>
